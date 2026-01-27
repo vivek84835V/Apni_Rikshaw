@@ -2,9 +2,13 @@
 
 This document outlines the API endpoints for the Apni Rikshaw application.
 
+---
+
 ## Base URL
 
 Assuming the server runs on `http://localhost:3000`, and routes are mounted under `/users`.
+
+---
 
 ## Endpoints
 
@@ -74,6 +78,7 @@ Assuming the server runs on `http://localhost:3000`, and routes are mounted unde
 #### Responses
 
 - **200 OK**
+
   ```json
   {
     "token": "string",
@@ -90,6 +95,7 @@ Assuming the server runs on `http://localhost:3000`, and routes are mounted unde
   ```
 
   - Sets a cookie named `token`.
+
 - **400 Bad Request** (Validation errors)
   ```json
   {
@@ -147,6 +153,7 @@ Assuming the server runs on `http://localhost:3000`, and routes are mounted unde
 #### Responses
 
 - **401 Unauthorized** (Logged out successfully, but status might be misleading)
+
   ```json
   {
     "message": "Logged Out"
@@ -154,6 +161,7 @@ Assuming the server runs on `http://localhost:3000`, and routes are mounted unde
   ```
 
   - Clears the `token` cookie and blacklists the token.
+
 - **401 Unauthorized** (If not authenticated)
   ```json
   {
