@@ -4,7 +4,9 @@ const { body } = require("express-validator");
 const usercontroller = require("../controller/user-controller");
 const middleware = require("../middleware/islogedin");
 
-router.post("/register",[
+router.post(
+  "/register",
+  [
     body("email").isEmail().withMessage("Please enter a valid email address"),
     body("fullname.firstname")
       .isLength({ min: 3 })
