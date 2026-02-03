@@ -169,6 +169,73 @@ Assuming the server runs on `http://localhost:3000`, and routes are mounted unde
   }
   ```
 
+--------
+
+## Captain Service (routes mounted under `/captain`)
+
+### Register Captain
+- Method: POST  
+- Path: `/captain/register`  
+- Description: Registers a new captain.
+
+Request Body
+```json
+{
+  "fullname": { "firstname": "string", "lastname": "string" },
+  "email": "string",
+  "password": "string",
+  "vehicle": {
+    "color": "string",
+    "plate": "string",
+    "vehicleType": "car|motorcycle|auto",
+    "capacity": 1
+  }
+}
+```
+
+Validation highlights:
+- fullname.firstname, fullname.lastname: min 3 chars
+- email: valid email
+- password: min 6 chars
+- vehicle.color, vehicle.plate: min 3 chars
+- vehicle.capacity: integer >= 1
+- vehicle.vehicleType: one of `car`, `motorcycle`, `auto`
+
+Responses
+- **200 OK**
+  ```json
+  {
+    "token": "string",
+    "CreateCaptain": {
+      "_id": "string",
+      "fullname": { "firstname": "string", "lastname": "string" },
+      "email": "string",
+      "vehicle": {
+        "color": "string",
+        "plate": "string",
+        "vehicleType": "string",
+        "capacity": number
+      },
+      "status": "inactive",
+      "location": { "lat": null, "lng": null }
+    }
+  }
+  ```
+- **400 Bad Request** (validation errors)
+  ```json
+  {
+    "errors": [
+      { "msg": "string", "param": "string", "location": "body" }
+    ]
+  }
+  ```
+- **400 Bad Request** (email already exists)
+  ```json
+  { "message": "Captain Already Exist" }
+  ```
+
+---
+
 ## Authentication
 
 - JWT tokens are used for authentication.
