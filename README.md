@@ -169,16 +169,18 @@ Assuming the server runs on `http://localhost:3000`, and routes are mounted unde
   }
   ```
 
---------
+---
 
 ## Captain Service (routes mounted under `/captain`)
 
 ### Register Captain
-- Method: POST  
-- Path: `/captain/register`  
+
+- Method: POST
+- Path: `/captain/register`
 - Description: Registers a new captain.
 
 Request Body
+
 ```json
 {
   "fullname": { "firstname": "string", "lastname": "string" },
@@ -194,6 +196,7 @@ Request Body
 ```
 
 Validation highlights:
+
 - fullname.firstname, fullname.lastname: min 3 chars
 - email: valid email
 - password: min 6 chars
@@ -202,6 +205,7 @@ Validation highlights:
 - vehicle.vehicleType: one of `car`, `motorcycle`, `auto`
 
 Responses
+
 - **200 OK**
   ```json
   {
@@ -224,14 +228,113 @@ Responses
 - **400 Bad Request** (validation errors)
   ```json
   {
-    "errors": [
-      { "msg": "string", "param": "string", "location": "body" }
-    ]
+    "errors": [{ "msg": "string", "param": "string", "location": "body" }]
   }
   ```
 - **400 Bad Request** (email already exists)
   ```json
   { "message": "Captain Already Exist" }
+  ```
+
+### Login Captain
+
+- Method: POST
+- Path: `/captain/login`
+- Description: Logs in an existing captain.
+
+Request Body
+
+```json
+{
+  "email": "string",
+  "password": "string"
+}
+```
+
+Responses
+
+- **200 OK**
+
+  ```json
+  {
+    "token": "string",
+    "captain": {
+      "_id": "string",
+      "fullname": { "firstname": "string", "lastname": "string" },
+      "email": "string",
+      "vehicle": {
+        "color": "string",
+        "plate": "string",
+        "vehicleType": "string",
+        "capacity": number
+      },
+      "status": "inactive",
+      "location": { "lat": number | null, "lng": number | null },
+      "socketId": "string"
+    }
+  }
+  ```
+
+  - Sets a cookie named `token`.
+
+- **400 Bad Request** (validation errors)
+  ```json
+  {
+    "errors": [{ "msg": "string", "param": "string", "location": "body" }]
+  }
+  ```
+- **401 Unauthorized** (invalid credentials)
+  ```json
+  { "message": "Invalid email or password" }
+  ```
+
+### Get Captain Profile
+
+- Method: GET
+- Path: `/captain/profile`
+- Description: Retrieves the authenticated captain's profile.
+- Auth: JWT token in cookie (`token`) or Authorization header (`Bearer <token>`).
+
+Responses
+
+- **200 OK**
+  ```json
+  {
+    "_id": "string",
+    "fullname": { "firstname": "string", "lastname": "string" },
+    "email": "string",
+    "vehicle": {
+      "color": "string",
+      "plate": "string",
+      "vehicleType": "string",
+      "capacity": number
+    },
+    "status": "inactive",
+    "location": { "lat": number | null, "lng": number | null },
+    "socketId": "string"
+  }
+  ```
+- **401 Unauthorized**
+  ```json
+  { "message": "Unauthorized" }
+  ```
+
+### Logout Captain
+
+- Method: GET
+- Path: `/captain/logout`
+- Description: Logs out the authenticated captain; clears `token` cookie and blacklists token.
+- Auth: JWT token required.
+
+Responses
+
+- **200 OK**
+  ```json
+  { "message": "Logout Succesfully" }
+  ```
+- **401 Unauthorized**
+  ```json
+  { "message": "Unauthorized" }
   ```
 
 ---
