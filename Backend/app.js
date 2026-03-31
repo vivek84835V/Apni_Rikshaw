@@ -4,8 +4,10 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 require("./db/db");
+``;
 const userroute = require("./routes/user-route");
 const caproute = require("./routes/captian-route");
+const rideroute = require('./routes/rideFare-route')
 const cookieParser = require("cookie-parser");
 
 app.use(cookieParser());
@@ -15,5 +17,6 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/users", userroute);
 app.use("/captain", caproute);
+app.use("/ride", rideroute)
 
 module.exports = app;

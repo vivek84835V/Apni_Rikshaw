@@ -337,11 +337,65 @@ Responses
   { "message": "Unauthorized" }
   ```
 
----
-
 ## Authentication
 
 - JWT tokens are used for authentication.
 - Tokens can be sent in cookies (`token`) or Authorization header (`Bearer <token>`).
 - Tokens expire in 24 hours.
 - Blacklisted tokens are checked on each request.
+
+---
+
+## Ride Fare Service (routes mounted under `/ride`)
+
+### Calculate Fare
+
+- **Method:** GET
+- **Path:** `/ride/fare`
+- **Description:** Calculates ride fares for different vehicle types based on distance and duration.
+- **Authentication:** Not required
+
+#### Query Parameters
+
+| Parameter | Type   | Required | Description            |
+| --------- | ------ | -------- | ---------------------- |
+| distance  | number | Yes      | Distance in kilometers |
+| time      | number | Yes      | Duration in minutes    |
+
+#### Request Example
+
+```
+GET /ride/fare?distance=5&time=15
+```
+
+#### Responses
+
+- **200 OK** (Fare calculation successful)
+  ```json
+  {
+    "auto": 95,
+    "car": 155,
+    "motorcycle": 40
+  }
+  ```
+  
+  **Fare Calculation Formula:**
+  - **Auto:** Base: ₹20 + (Distance × ₹10) + (Time × ₹1.5)
+  - **Car:** Base: ₹50 + (Distance × ₹15) + (Time × ₹2)
+  - **Motorcycle:** Base: ₹10 + (Distance × ₹5) + (Time × ₹1)
+
+- **400 Bad Request** (Invalid distance or time parameters)
+  ```json
+  {
+    "error": "Invalid distance or time provided."
+  }
+  ```
+
+- **500 Internal Server Error** (Server-side error)
+  ```json
+  {
+    "error": "Internal Server Error"
+  }
+  ```
+
+---
